@@ -53,8 +53,8 @@ Sfera::Sfera(double r, int pion, int poziom)
             this->wektoryNormalne.push_back(wektorNormalny);
 
             QVector <double> wspolrzedneTekstur;
-            wspolrzedneTekstur.push_back((double)j/(double)poziom * tekstura->width());
-            wspolrzedneTekstur.push_back((double)i/(double)pion * tekstura->height());
+            wspolrzedneTekstur.push_back((int)((double)j/(double)poziom * tekstura->width()));
+            wspolrzedneTekstur.push_back((int)((double)i/(double)pion * tekstura->height()));
 
             this->wspolrzedneTekstury.push_back(wspolrzedneTekstur);
         }
@@ -201,8 +201,23 @@ void Sfera::obliczTrojkaty2d()
     {
         for(int j=0; j<this->trojkaty3d[i].size(); j++)
         {
-            punkt2d.push_back((this->trojkaty3d[i][j][0] * d)/(this->trojkaty3d[i][j][2]+d) +300.0);  //x
-            punkt2d.push_back((this->trojkaty3d[i][j][1] * d)/(this->trojkaty3d[i][j][2]+d) +450.0);  //y
+            if(this-> pozycja == 0)
+            {
+                punkt2d.push_back((this->trojkaty3d[i][j][0] * d)/(this->trojkaty3d[i][j][2]+d) +200.0);  //x
+                punkt2d.push_back((this->trojkaty3d[i][j][1] * d)/(this->trojkaty3d[i][j][2]+d) +450.0);  //y
+            }
+            else if(this->pozycja == 2)
+            {
+                punkt2d.push_back((this->trojkaty3d[i][j][0] * d)/(this->trojkaty3d[i][j][2]+d) +400.0);  //x
+                punkt2d.push_back((this->trojkaty3d[i][j][1] * d)/(this->trojkaty3d[i][j][2]+d) +450.0);  //y
+            }
+            else
+            {
+                punkt2d.push_back((this->trojkaty3d[i][j][0] * d)/(this->trojkaty3d[i][j][2]+d) +300.0);  //x
+                punkt2d.push_back((this->trojkaty3d[i][j][1] * d)/(this->trojkaty3d[i][j][2]+d) +450.0);  //y
+            }
+
+
             trojkat.push_back(punkt2d);
             punkt2d.clear();
         }
@@ -344,14 +359,15 @@ void Sfera::obracaj(int katObrotu)
                 macierzprzeksztalcen[0][0] = 1;
                 macierzprzeksztalcen[0][1] = 0;
                 macierzprzeksztalcen[0][2] = 0;
-                if(this-> pozycja == 0)
-                {
-                    macierzprzeksztalcen[0][3] = -100;
-                }
-                else if(this->pozycja == 2)
-                {
-                    macierzprzeksztalcen[0][3] = 100;
-                }
+                macierzprzeksztalcen[0][3] = 0;
+//                if(this-> pozycja == 0)
+//                {
+//                    macierzprzeksztalcen[0][3] = -100;
+//                }
+//                else if(this->pozycja == 2)
+//                {
+//                    macierzprzeksztalcen[0][3] = 100;
+//                }
 
                 macierzprzeksztalcen[1][0] = 0;
                 macierzprzeksztalcen[1][1] = 1;
@@ -429,13 +445,13 @@ void Sfera::obracaj(int katObrotu)
 
 void Sfera::rysujSfere(QImage * obrazDocelowy,int szer)
 {
-    int wyznacznik=0;
+    double wyznacznik=0;
     for(int i=0; i<this->wektoryNormalne.size(); i++)
     {
         wyznacznik = (this->trojkaty2d[i][1][0] - this->trojkaty2d[i][0][0]) * (this->trojkaty2d[i][2][1] - this->trojkaty2d[i][0][1]) -
                         (this->trojkaty2d[i][1][1] - this->trojkaty2d[i][0][1]) * (this->trojkaty2d[i][2][0] - this->trojkaty2d[i][0][0]);
 
-        if(wyznacznik>0)
+        if(wyznacznik>=0)
         {
             rysujScianeSfery(i, obrazDocelowy, szer);
         }
@@ -476,15 +492,27 @@ void Sfera::rysujScianeSfery(int indeksSciany, QImage * obrazDocelowy,int szer)
                 //if(v>0 && v<1 && u>0 && u<1 && w>0 && w<1)
                 if(v>=0 && v<=1 && u>=0 && u<=1 && w>=0 && w<=1) //jest wewnatrz
                 {
-                        if(indeksSciany>=0 && indeksSciany<190)
-                        {
+                        //if(indeksSciany>=0 && indeksSciany<190)
+                        //{
                             int xt = u *this->trojkaty2dTekstury[indeksSciany][0][0] + v *this->trojkaty2dTekstury[indeksSciany][1][0] + w * this->trojkaty2dTekstury[indeksSciany][2][0];
                             int yt = u * this->trojkaty2dTekstury[indeksSciany][0][1] + v * this->trojkaty2dTekstury[indeksSciany][1][1] + w * this->trojkaty2dTekstury[indeksSciany][2][1];
 
                             wyswietlany[szer*4*(int)j + 4*(int)i] =  zrodlo[tekstura->width()*4*yt + 4*xt];
                             wyswietlany[szer*4*(int)j + 4*(int)i + 1] = zrodlo[tekstura->width()*4*yt + 4*xt + 1];
                             wyswietlany[szer*4*(int)j + 4*(int)i + 2] = zrodlo[tekstura->width()*4*yt + 4*xt + 2];
-                        }
+
+//                            wyswietlany[szer*4*(int)j + 4*((int)i+1)] =  zrodlo[tekstura->width()*4*yt + 4*(xt +1)];
+//                            wyswietlany[szer*4*(int)j + 4*((int)i+1) + 1] = zrodlo[tekstura->width()*4*yt + 4*(xt +1) + 1];
+//                            wyswietlany[szer*4*(int)j + 4*((int)i+1) + 2] = zrodlo[tekstura->width()*4*yt + 4*(xt +1) + 2];
+
+//                            wyswietlany[szer*4*((int)j+1) + 4*(int)i] =  zrodlo[tekstura->width()*4*(yt+1) + 4*xt];
+//                            wyswietlany[szer*4*((int)j+1) + 4*(int)i + 1] = zrodlo[tekstura->width()*4*(yt+1) + 4*xt + 1];
+//                            wyswietlany[szer*4*((int)j+1) + 4*(int)i + 2] = zrodlo[tekstura->width()*4*(yt+1) + 4*xt + 2];
+
+//                            wyswietlany[szer*4*((int)j+1) + 4*((int)i+1)] =  zrodlo[tekstura->width()*4*(yt+1) + 4*(xt +1)];
+//                            wyswietlany[szer*4*((int)j+1) + 4*((int)i+1) + 1] = zrodlo[tekstura->width()*4*(yt+1) + 4*(xt +1) + 1];
+//                            wyswietlany[szer*4*((int)j+1) + 4*((int)i+1) + 2] = zrodlo[tekstura->width()*4*(yt+1) + 4*(xt +1) + 2];
+                       // }
 
 //                    wyswietlany[szer*4*(int)j + 4*(int)i] = 211;
 //                    wyswietlany[szer*4*(int)j + 4*(int)i + 1] = 0;

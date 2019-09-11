@@ -30,14 +30,18 @@ SOURCES += \
     Sfera.cpp \
     Tor.cpp \
     Przeszkoda.cpp \
-    Punkt.cpp
+    Punkt.cpp \
+    Wynik.cpp \
+    Ranking.cpp
 
 HEADERS += \
         mainwindow.h \
     Sfera.h \
     Tor.h \
     Przeszkoda.h \
-    Punkt.h
+    Punkt.h \
+    Wynik.h \
+    Ranking.h
 
 FORMS += \
         mainwindow.ui

@@ -8,6 +8,9 @@
 #include <ctime>
 #include <cmath>
 #include <algorithm>
+#include <Wynik.h>
+#include <QString>
+#include <QInputDialog>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -92,6 +95,7 @@ void MainWindow::on_pushButton_clicked()
     int katObrotu = 15;
     int katObrotuPunktow = 180;
     bool koniecGry = false;
+    bool wygrana = false;
 
 
     while(true)
@@ -110,7 +114,7 @@ void MainWindow::on_pushButton_clicked()
 //        else {
 //            katObrotuPunktow += 15;
 //        }
-        QTime pause = QTime::currentTime().addMSecs(50);
+        QTime pause = QTime::currentTime().addMSecs(20);
                     while(QTime::currentTime() < pause){
                         QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
                     }
@@ -179,9 +183,11 @@ void MainWindow::on_pushButton_clicked()
              }
              if(i==Przeszkody.size()-1 && zycia>0) //oznacza to, ze ostatnia przeszkoda zniknela, wygrana
              {
+                 TEST();
                  wyswietlObraz(obrazWygrana);
                  update();
                  koniecGry = true;
+                 wygrana = true;
              }
 
              Przeszkody.removeFirst();
@@ -194,6 +200,16 @@ void MainWindow::on_pushButton_clicked()
       przesunieciePrzeszkody += 5;
       testSfera->rysujSfere(obrazzrodlowy, szer);
       update();
+    }
+    if(wygrana)
+    {
+        QString text = QInputDialog::getText(this, "Ranking", "Podaj swój nick:");
+        Wynik wynik(text ,zebranePunkty);
+        this->ranking.dodajWynik(wynik);
+        obrazWygrana = new QImage(":/tekstury/VictoryScreen.jpg");
+        *obrazWygrana = obrazWygrana->scaled(szer, wys);
+        ranking.rysujRanking(obrazWygrana);
+        wyswietlObraz(obrazWygrana);
     }
 
 }
@@ -429,4 +445,10 @@ void MainWindow::rysujLicznikPunktow()
             }
         }
     }
+}
+
+
+void MainWindow::TEST()
+{
+
 }

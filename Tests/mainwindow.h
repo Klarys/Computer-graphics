@@ -5,6 +5,9 @@
 #include <Przeszkoda.h>
 #include <Punkt.h>
 #include <QMainWindow>
+#include <QInputDialog>
+#include <Wynik.h>
+#include <Ranking.h>
 
 namespace Ui {
 class MainWindow;
@@ -47,6 +50,7 @@ private:
     int iloscPrzeszkod = 20;
     int zebranePunkty = 0;
     int zycia = 3;
+    Ranking ranking;
 
 
 private slots:
@@ -63,7 +67,7 @@ private slots:
 
     void paintEvent(QPaintEvent*);
 
-
+    void TEST();
 
 
     void on_pushButton_clicked();
