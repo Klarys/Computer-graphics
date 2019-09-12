@@ -41,6 +41,8 @@ public:
     void czysc();
     int najwiekszeZ();
     void obliczTrojkaty2dTekstury();
+    double wspolczynnikSwiatlaBezVectorow(int indeksSciany);
+    double wspolczynnikSwiatla(int indeksSciany);
 
 };
 

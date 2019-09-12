@@ -413,7 +413,7 @@ void Przeszkoda::rysujPrzeszkode(QImage *obrazDocelowy)
         wyznacznik = (this->trojkaty2d[i][1][0] - this->trojkaty2d[i][0][0]) * (this->trojkaty2d[i][2][1] - this->trojkaty2d[i][0][1]) -
                         (this->trojkaty2d[i][1][1] - this->trojkaty2d[i][0][1]) * (this->trojkaty2d[i][2][0] - this->trojkaty2d[i][0][0]);
 
-        if(wyznacznik>0)
+        if(wyznacznik>=0)
         {
             rysujScianePrzeszkody(i, obrazDocelowy);
         }
@@ -436,9 +436,9 @@ void Przeszkoda::rysujScianePrzeszkody(int indeksSciany, QImage * obrazDocelowy)
 
         double maxx = std::max(this->trojkaty2d[indeksSciany][0][0], std::max(this->trojkaty2d[indeksSciany][1][0],this->trojkaty2d[indeksSciany][2][0]));
         double maxy = std::max(this->trojkaty2d[indeksSciany][0][1], std::max(this->trojkaty2d[indeksSciany][1][1],this->trojkaty2d[indeksSciany][2][1]));
-        for(double i=minx; i<=maxx+1; i++)
+        for(double i=minx-1; i<=maxx+1; i++)
         {
-            for(double j=miny; j<=maxy+1; j++)
+            for(double j=miny-1; j<=maxy+1; j++)
             {
                 v = ((i-this->trojkaty2d[indeksSciany][0][0])*(this->trojkaty2d[indeksSciany][2][1]-this->trojkaty2d[indeksSciany][0][1])
                         -(j-this->trojkaty2d[indeksSciany][0][1])*(this->trojkaty2d[indeksSciany][2][0]-this->trojkaty2d[indeksSciany][0][0]))/mian;
@@ -449,12 +449,12 @@ void Przeszkoda::rysujScianePrzeszkody(int indeksSciany, QImage * obrazDocelowy)
                 u = 1.0-v-w;
 
                 //if(v>0 && v<1 && u>0 && u<1 && w>0 && w<1)
-                if(v>=0 && v<=1 && u>=0 && u<=1 && w>=0 && w<=1) //jest wewnatrz
+                if(v>=-0.1 && v<=1.1 && u>=-0.1 && u<=1.1 && w>=-0.1 && w<=1.1) //jest wewnatrz
                 {
 
                     wyswietlany[szer*4*(int)j + 4*(int)i] = 0;
                     wyswietlany[szer*4*(int)j + 4*(int)i + 1] = 0;
-                    wyswietlany[szer*4*(int)j + 4*(int)i + 2] = 230;
+                    wyswietlany[szer*4*(int)j + 4*(int)i + 2] = 230 * wspolczynnikSwiatlaBezVectorow(indeksSciany);
                 }
             }
         }
@@ -478,5 +478,82 @@ int Przeszkoda::najmniejszeZ() //zwraca wspolrzedna z najblizej obserwatora
             wynik = this->wspolrzedne3dprzek[i][2];
         }
     }
+    return wynik;
+}
+
+double Przeszkoda::wspolczynnikSwiatlaBezVectorow(int indeksSciany)
+{
+
+    double Ax = this->trojkaty3d[indeksSciany][0][0];
+    double Ay = this->trojkaty3d[indeksSciany][0][1];
+    double Az = this->trojkaty3d[indeksSciany][0][2];
+
+    double Bx = this->trojkaty3d[indeksSciany][1][0];
+    double By = this->trojkaty3d[indeksSciany][1][1];
+    double Bz = this->trojkaty3d[indeksSciany][1][2];
+
+    double Cx = this->trojkaty3d[indeksSciany][2][0];
+    double Cy = this->trojkaty3d[indeksSciany][2][1];
+    double Cz = this->trojkaty3d[indeksSciany][2][2];
+
+    double  Px = Bx-Ax;
+    double  Py = By-Ay;
+    double  Pz = Bz-Az;
+
+    double  Rx = Cx-Ax;
+    double  Ry = Cy-Ay;
+    double  Rz = Cz-Az;
+
+    double  wektorNormalnyx = Py*Rz-Pz*Ry;
+    double  wektorNormalnyy = Pz*Rx-Px*Rz;
+    double  wektorNormalnyz = Px*Ry-Py*Rx;
+
+    double dlugosc = sqrt(wektorNormalnyx*wektorNormalnyx+wektorNormalnyy*wektorNormalnyy+wektorNormalnyz*wektorNormalnyz);
+
+    wektorNormalnyx/=dlugosc;
+    wektorNormalnyz/=dlugosc;
+    wektorNormalnyy/=dlugosc;
+
+    double swiatlox, swiatloy, swiatloz;
+
+    if(this->numerToru == 1)
+    {
+       swiatlox = (Ax+Bx+Cx)/3;
+       swiatloy = (Ay+By+Cy)/3+40;
+       swiatloz = (Az+Bz+Cz)/3-200;
+    }
+    else if(this->numerToru == 0)
+    {
+        swiatlox = (Ax+Bx+Cx)/3-40;
+        swiatloy = (Ay+By+Cy)/3+40;
+        swiatloz = (Az+Bz+Cz)/3-200;
+    }
+    else if(this->numerToru == 2)
+    {
+       swiatlox = (Ax+Bx+Cx)/3+40;
+       swiatloy = (Ay+By+Cy)/3+40;
+       swiatloz = (Az+Bz+Cz)/3-200;
+    }
+
+
+    double dlugosc2 = sqrt(swiatlox*swiatlox+swiatloy*swiatloy+swiatloz*swiatloz);
+
+    swiatlox/=dlugosc2;
+    swiatloy/=dlugosc2;
+    swiatloz/=dlugosc2;
+
+    double wynik = wektorNormalnyx*swiatlox + wektorNormalnyy*swiatloy + wektorNormalnyz*swiatloz;
+
+    if(wynik >= 0)
+    {
+       wynik = 0;
+    }
+    else
+    {
+       wynik*=(-1);
+    }
+
+    wynik = std::max(wynik, 0.2);
+
     return wynik;
 }

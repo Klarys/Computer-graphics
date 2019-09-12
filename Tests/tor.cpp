@@ -19,39 +19,39 @@ void Tor::obliczTrojkaty3d()
 
     //0 trojkat
     punkt3d.push_back(-300.0);
-    punkt3d.push_back(120.0);
+    punkt3d.push_back(100.0);
     punkt3d.push_back(0);
     trojkat.push_back(punkt3d);
     punkt3d.clear();
 
-    punkt3d.push_back(-300.0);
-    punkt3d.push_back(-500.0);
+    punkt3d.push_back(-250.0);
+    punkt3d.push_back(-550.0);
     punkt3d.push_back(300.0);
     trojkat.push_back(punkt3d);
     punkt3d.clear();
 
-    punkt3d.push_back(300.0);
-    punkt3d.push_back(-500.0);
+    punkt3d.push_back(250.0);
+    punkt3d.push_back(-550.0);
     punkt3d.push_back(300.0);
     trojkat.push_back(punkt3d);
     punkt3d.clear();
     this->trojkaty3d.push_back(trojkat);
     trojkat.clear();
     //1 trojkat
-    punkt3d.push_back(300.0);
-    punkt3d.push_back(-500.0);
+    punkt3d.push_back(250.0);
+    punkt3d.push_back(-550.0);
     punkt3d.push_back(300.0);
     trojkat.push_back(punkt3d);
     punkt3d.clear();
 
     punkt3d.push_back(300.0);
-    punkt3d.push_back(120.0);
+    punkt3d.push_back(100.0);
     punkt3d.push_back(0);
     trojkat.push_back(punkt3d);
     punkt3d.clear();
 
     punkt3d.push_back(-300.0);
-    punkt3d.push_back(120.0);
+    punkt3d.push_back(100.0);
     punkt3d.push_back(0);
     trojkat.push_back(punkt3d);
     punkt3d.clear();

@@ -8,6 +8,7 @@
 #include <QInputDialog>
 #include <Wynik.h>
 #include <Ranking.h>
+#include <QMouseEvent>
 
 namespace Ui {
 class MainWindow;
@@ -51,6 +52,9 @@ private:
     int zebranePunkty = 0;
     int zycia = 3;
     Ranking ranking;
+    QCursor kursorL;
+    QCursor kursorP;
+    bool wGrze = false;
 
 
 private slots:
@@ -74,6 +78,9 @@ private slots:
     void on_PozycjaWPrawo_clicked();
     void on_PozycjaWLewo_clicked();
     void on_spinBox_valueChanged(int arg1);
+
+    void mousePressEvent(QMouseEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
 };
 
 #endif // MAINWINDOW_H

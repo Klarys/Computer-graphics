@@ -17,5 +17,8 @@
         <file>9.png</file>
         <file>SferaTekstura.png</file>
         <file>VictoryScreen.jpg</file>
+        <file>Tlo.png</file>
+        <file>kursorL.png</file>
+        <file>kursorP.png</file>
     </qresource>
 </RCC>

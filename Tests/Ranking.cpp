@@ -46,14 +46,13 @@ void Ranking::rysujRanking(QImage * obrazDocelowy)
     p.setFont(QFont("Open Sans", 30));
     p.drawText(150,150,150,150,0, "Ranking: ");
 
-    int x = 190;
     int y = 190;
 
     p.setFont(QFont("Open Sans", 20));
     for(int i=0; i<this->Wyniki.size(); i++)
     {
         const QString wiersz = QString::number(i+1) + ". " + this->Wyniki[i].Gracz + " : " + QString::number(this->Wyniki[i].zebranePunkty);
-        p.drawText(x, y, 200, 30, 0, wiersz);
+        p.drawText(190, y, 200, 30, 0, wiersz);
 
         y += 30;
     }

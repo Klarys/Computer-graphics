@@ -36,6 +36,7 @@ public:
     void rysujScianePrzeszkody(int indeksSciany, QImage * obrazDocelowy);
     void czysc();
     int najmniejszeZ();
+    double wspolczynnikSwiatlaBezVectorow(int indeksSciany);
 };
 
 

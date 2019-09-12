@@ -18,13 +18,30 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    //parent->setMouseTracking(true);
+    this->setMouseTracking(true);
+    this->centralWidget()->setMouseTracking(true);
+    ui->frame->setMouseTracking(true);
+    setMouseTracking(true);
+
     szer = ui->frame->width();
     wys = ui->frame->height();
     poczX = ui->frame->x();
     poczY = ui->frame->y();
 
+    ui->PozycjaWLewo->setEnabled(false);
+    ui->PozycjaWPrawo->setEnabled(false);
+
+
+
+    QPixmap kursorLObraz = QPixmap(":/tekstury/kursorL.png");
+    kursorL = QCursor(kursorLObraz, 0, 0);
+    QPixmap kursorPObraz = QPixmap(":/tekstury/kursorP.png");
+    kursorP = QCursor(kursorPObraz, 0, 0);
+
+
     obrazzrodlowy = new QImage(szer,wys,QImage::Format_RGB32);
-    obrazTor = new QImage(szer,wys,QImage::Format_RGB32);
+    obrazTor = new QImage(":/tekstury/Tlo.png");
     obrazPorazka = new QImage(":/tekstury/GameOverScreen.jpg");
     *obrazPorazka = obrazPorazka->scaled(szer, wys);
     obrazWygrana = new QImage(szer,wys,QImage::Format_RGB32);
@@ -81,6 +98,9 @@ void MainWindow::on_pushButton_clicked()
     //Sfera testSfera((double)0,9,18);
     //testSfera->obliczWspolrzedne2d();
 
+    wGrze = true;
+    ui->PozycjaWLewo->setEnabled(true);
+    ui->PozycjaWPrawo->setEnabled(true);
     generujObiekty();
     zycia = 3;
     zebranePunkty = 0;
@@ -118,7 +138,7 @@ void MainWindow::on_pushButton_clicked()
                     while(QTime::currentTime() < pause){
                         QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
                     }
-        wyswietlObraz(obrazTor);
+       wyswietlObraz(obrazTor);
 
       testSfera->obracaj(katObrotu);
       testSfera->czysc();
@@ -153,12 +173,12 @@ void MainWindow::on_pushButton_clicked()
          rysujLicznikPunktow();
       }
 
-      for(int i=0; i<Przeszkody.size(); i++)
+      for(int i=Przeszkody.size()-1; i>=0; i--)
       {
          Przeszkody[i]->przesuwaj(przesunieciePrzeszkody);
          int min = Przeszkody[i]->najmniejszeZ();
          Przeszkody[i]->czysc();
-         if(min > 0 && min <700) //w tym przedziale obiekty sa widoczne
+         if(min > 0 && min <600) //w tym przedziale obiekty sa widoczne
          {
              Przeszkody[i]->obliczTrojkaty3d();
              Przeszkody[i]->obliczTrojkaty2d();
@@ -171,6 +191,9 @@ void MainWindow::on_pushButton_clicked()
              {
                  if(zycia-1<=0)
                  {
+                    wGrze = false;
+                    ui->PozycjaWLewo->setEnabled(false);
+                    ui->PozycjaWPrawo->setEnabled(false);
                     wyswietlObraz(obrazPorazka);
                     update();
                     koniecGry = true;
@@ -183,7 +206,9 @@ void MainWindow::on_pushButton_clicked()
              }
              if(i==Przeszkody.size()-1 && zycia>0) //oznacza to, ze ostatnia przeszkoda zniknela, wygrana
              {
-                 TEST();
+                 wGrze = false;
+                 ui->PozycjaWLewo->setEnabled(false);
+                 ui->PozycjaWPrawo->setEnabled(false);
                  wyswietlObraz(obrazWygrana);
                  update();
                  koniecGry = true;
@@ -195,12 +220,14 @@ void MainWindow::on_pushButton_clicked()
       }
       if(koniecGry)
       {
+          wGrze = false;
           break;
       }
       przesunieciePrzeszkody += 5;
       testSfera->rysujSfere(obrazzrodlowy, szer);
       update();
     }
+
     if(wygrana)
     {
         QString text = QInputDialog::getText(this, "Ranking", "Podaj swój nick:");
@@ -298,8 +325,7 @@ void MainWindow::generujObiekty()
 
 void MainWindow::rysujZycia()
 {
-    double r = 16;
-    double odlegosc=0;
+    double r = 16;;
     for (int i=0; i<120; i++)
     {
         for(int j=0; j<40; j++)
@@ -451,4 +477,50 @@ void MainWindow::rysujLicznikPunktow()
 void MainWindow::TEST()
 {
 
+}
+
+void MainWindow::mousePressEvent(QMouseEvent *event)
+{
+
+    int x0 = event->x();
+    int y0 = event->y();
+
+    x0 -= poczX;
+    y0 -= poczY;
+
+    if(x0>0 && x0<szer/2 && y0>0 && y0<wys && wGrze)
+    {
+        testSfera->pozycjaWLewo();
+    }
+    else if (x0<szer && x0>szer/2 && y0>0 && y0<wys && wGrze)
+    {
+        testSfera->pozycjaWPrawo();
+    }
+
+
+}
+
+void MainWindow::mouseMoveEvent(QMouseEvent *event)
+{
+
+    int x0 = event->x();
+    int y0 = event->y();
+
+    x0 -= poczX;
+    y0 -= poczY;
+
+
+    if(x0>0 && x0<szer/2 && y0>0 && y0<wys && wGrze)
+    {
+        setCursor(kursorL);
+    }
+    else if (x0<szer && x0>szer/2 && y0>0 && y0<wys && wGrze)
+    {
+
+        setCursor(kursorP);
+    }
+    else
+    {
+        setCursor(Qt::ArrowCursor);
+    }
 }

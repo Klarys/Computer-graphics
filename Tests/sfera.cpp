@@ -477,6 +477,8 @@ void Sfera::rysujScianeSfery(int indeksSciany, QImage * obrazDocelowy,int szer)
 
         double maxx = std::max(this->trojkaty2d[indeksSciany][0][0], std::max(this->trojkaty2d[indeksSciany][1][0],this->trojkaty2d[indeksSciany][2][0]));
         double maxy = std::max(this->trojkaty2d[indeksSciany][0][1], std::max(this->trojkaty2d[indeksSciany][1][1],this->trojkaty2d[indeksSciany][2][1]));
+
+
         for(double i=minx; i<=maxx; i++)
         {
             for(double j=miny; j<=maxy; j++)
@@ -490,47 +492,18 @@ void Sfera::rysujScianeSfery(int indeksSciany, QImage * obrazDocelowy,int szer)
                 u = 1.0-v-w;
 
                 //if(v>0 && v<1 && u>0 && u<1 && w>0 && w<1)
-                if(v>=0 && v<=1 && u>=0 && u<=1 && w>=0 && w<=1) //jest wewnatrz
+                if(v>=-0.1 && v<=1.1 && u>=-0.1 && u<=1.1 && w>=-0.1 && w<=1.1) //jest wewnatrz
                 {
-                        //if(indeksSciany>=0 && indeksSciany<190)
-                        //{
-                            int xt = u *this->trojkaty2dTekstury[indeksSciany][0][0] + v *this->trojkaty2dTekstury[indeksSciany][1][0] + w * this->trojkaty2dTekstury[indeksSciany][2][0];
-                            int yt = u * this->trojkaty2dTekstury[indeksSciany][0][1] + v * this->trojkaty2dTekstury[indeksSciany][1][1] + w * this->trojkaty2dTekstury[indeksSciany][2][1];
+                    int xt = u * this->trojkaty2dTekstury[indeksSciany][0][0] + v * this->trojkaty2dTekstury[indeksSciany][1][0] + w * this->trojkaty2dTekstury[indeksSciany][2][0];
+                    int yt = u * this->trojkaty2dTekstury[indeksSciany][0][1] + v * this->trojkaty2dTekstury[indeksSciany][1][1] + w * this->trojkaty2dTekstury[indeksSciany][2][1];
 
-                            wyswietlany[szer*4*(int)j + 4*(int)i] =  zrodlo[tekstura->width()*4*yt + 4*xt];
-                            wyswietlany[szer*4*(int)j + 4*(int)i + 1] = zrodlo[tekstura->width()*4*yt + 4*xt + 1];
-                            wyswietlany[szer*4*(int)j + 4*(int)i + 2] = zrodlo[tekstura->width()*4*yt + 4*xt + 2];
+                    if(xt == 803) xt--;
+                    if(yt == 402) yt--;
 
-//                            wyswietlany[szer*4*(int)j + 4*((int)i+1)] =  zrodlo[tekstura->width()*4*yt + 4*(xt +1)];
-//                            wyswietlany[szer*4*(int)j + 4*((int)i+1) + 1] = zrodlo[tekstura->width()*4*yt + 4*(xt +1) + 1];
-//                            wyswietlany[szer*4*(int)j + 4*((int)i+1) + 2] = zrodlo[tekstura->width()*4*yt + 4*(xt +1) + 2];
-
-//                            wyswietlany[szer*4*((int)j+1) + 4*(int)i] =  zrodlo[tekstura->width()*4*(yt+1) + 4*xt];
-//                            wyswietlany[szer*4*((int)j+1) + 4*(int)i + 1] = zrodlo[tekstura->width()*4*(yt+1) + 4*xt + 1];
-//                            wyswietlany[szer*4*((int)j+1) + 4*(int)i + 2] = zrodlo[tekstura->width()*4*(yt+1) + 4*xt + 2];
-
-//                            wyswietlany[szer*4*((int)j+1) + 4*((int)i+1)] =  zrodlo[tekstura->width()*4*(yt+1) + 4*(xt +1)];
-//                            wyswietlany[szer*4*((int)j+1) + 4*((int)i+1) + 1] = zrodlo[tekstura->width()*4*(yt+1) + 4*(xt +1) + 1];
-//                            wyswietlany[szer*4*((int)j+1) + 4*((int)i+1) + 2] = zrodlo[tekstura->width()*4*(yt+1) + 4*(xt +1) + 2];
-                       // }
-
-//                    wyswietlany[szer*4*(int)j + 4*(int)i] = 211;
-//                    wyswietlany[szer*4*(int)j + 4*(int)i + 1] = 0;
-//                    wyswietlany[szer*4*(int)j + 4*(int)i + 2] = 148;
-
-//                    wyswietlany[szer*4*((int)j) + 4*((int)i+1)] = 211;
-//                    wyswietlany[szer*4*((int)j) + 4*((int)i+1) + 1] = 0;
-//                    wyswietlany[szer*4*((int)j) + 4*((int)i+1) + 2] = 148;
-
-//                    wyswietlany[szer*4*((int)j+1) + 4*((int)i)] = 211;
-//                    wyswietlany[szer*4*((int)j+1) + 4*((int)i) + 1] = 0;
-//                    wyswietlany[szer*4*((int)j+1) + 4*((int)i) + 2] = 148;
-
-//                    wyswietlany[szer*4*((int)j+1) + 4*((int)i+1)] = 211;
-//                    wyswietlany[szer*4*((int)j+1) + 4*((int)i+1) + 1] = 0;
-//                    wyswietlany[szer*4*((int)j+1) + 4*((int)i+1) + 2] = 148;
+                    wyswietlany[szer*4*(int)j + 4*(int)i] =  zrodlo[tekstura->width()*4*yt + 4*xt] * wspolczynnikSwiatlaBezVectorow(indeksSciany);
+                    wyswietlany[szer*4*(int)j + 4*(int)i + 1] = zrodlo[tekstura->width()*4*yt + 4*xt + 1] * wspolczynnikSwiatlaBezVectorow(indeksSciany);
+                    wyswietlany[szer*4*(int)j + 4*(int)i + 2] = zrodlo[tekstura->width()*4*yt + 4*xt + 2] * wspolczynnikSwiatlaBezVectorow(indeksSciany);
                 }
-
             }
         }
     }
@@ -571,4 +544,157 @@ int Sfera::najwiekszeZ()
         }
     }
     return  wynik;
+}
+
+double Sfera::wspolczynnikSwiatla(int indeksSciany)
+{
+    QVector <double> wektorNormalnySciany;
+    QVector <double> a;
+    QVector <double> b;
+
+    for(int j=0; j<3; j++)
+    {
+        a.push_back(trojkaty3d[indeksSciany][1][j] - trojkaty3d[indeksSciany][0][j]);
+        b.push_back(trojkaty3d[indeksSciany][2][j] - trojkaty3d[indeksSciany][0][j]);
+    }
+    //axb
+    wektorNormalnySciany.push_back(a[1] * b[2] - a[2] * b[1]);
+    wektorNormalnySciany.push_back(a[2] * b[0] - a[0] * b[2]);
+    wektorNormalnySciany.push_back(a[0] * b[1] - a[1] * b[0]);
+
+    //normalizacja
+    double dlugosc = sqrt(wektorNormalnySciany[0] * wektorNormalnySciany[0]  + wektorNormalnySciany[1] * wektorNormalnySciany[1]
+                      + wektorNormalnySciany[2] * wektorNormalnySciany[2]);
+
+    for(int i=0; i<wektorNormalnySciany.size(); i++)
+    {
+        wektorNormalnySciany[i] /= dlugosc;
+    }
+
+    //zrodlo swiatla
+    QVector <double> swiatlo;
+
+    if(this->pozycja == 1) //srodek
+    {
+        swiatlo.push_back((trojkaty3d[indeksSciany][0][0] + trojkaty3d[indeksSciany][1][0] + trojkaty3d[indeksSciany][2][0])/3.0);
+        swiatlo.push_back((trojkaty3d[indeksSciany][0][1] + trojkaty3d[indeksSciany][1][1] + trojkaty3d[indeksSciany][2][1])/3.0 + 40);
+        swiatlo.push_back((trojkaty3d[indeksSciany][0][2] + trojkaty3d[indeksSciany][1][2] + trojkaty3d[indeksSciany][2][2])/3.0 - 40);
+    }
+    else if(this->pozycja == 0)
+    {
+        swiatlo.push_back((trojkaty3d[indeksSciany][0][0] + trojkaty3d[indeksSciany][1][0] + trojkaty3d[indeksSciany][2][0])/3.0 - 40);
+        swiatlo.push_back((trojkaty3d[indeksSciany][0][1] + trojkaty3d[indeksSciany][1][1] + trojkaty3d[indeksSciany][2][1])/3.0 + 40);
+        swiatlo.push_back((trojkaty3d[indeksSciany][0][2] + trojkaty3d[indeksSciany][1][2] + trojkaty3d[indeksSciany][2][2])/3.0 - 40);
+    }
+    else if(this->pozycja == 2)
+    {
+        swiatlo.push_back((trojkaty3d[indeksSciany][0][0] + trojkaty3d[indeksSciany][1][0] + trojkaty3d[indeksSciany][2][0])/3.0 + 40);
+        swiatlo.push_back((trojkaty3d[indeksSciany][0][1] + trojkaty3d[indeksSciany][1][1] + trojkaty3d[indeksSciany][2][1])/3.0 + 40);
+        swiatlo.push_back((trojkaty3d[indeksSciany][0][2] + trojkaty3d[indeksSciany][1][2] + trojkaty3d[indeksSciany][2][2])/3.0 - 40);
+    }
+
+    double dlugosc2 = sqrt(swiatlo[0] * swiatlo[0]  + swiatlo[1] * swiatlo[1]
+                      + swiatlo[2] * swiatlo[2]);
+
+    for(int i=0; i<swiatlo.size(); i++)
+    {
+        swiatlo[i] /= dlugosc2;
+    }
+
+    double wynik = wektorNormalnySciany[0] * swiatlo[0] + wektorNormalnySciany[1] * swiatlo[1] + wektorNormalnySciany[2]*swiatlo[2];
+
+    if(wynik >=0 )
+    {
+        wynik = 0;
+    }
+    else
+    {
+        wynik*= (-1);
+    }
+
+    if(wynik < 0.2)
+    {
+        wynik = 0.2;
+    }
+
+    return wynik;
+
+}
+
+double Sfera::wspolczynnikSwiatlaBezVectorow(int indeksSciany)
+{
+
+    double Ax = this->trojkaty3d[indeksSciany][0][0];
+    double Ay = this->trojkaty3d[indeksSciany][0][1];
+    double Az = this->trojkaty3d[indeksSciany][0][2];
+
+    double Bx = this->trojkaty3d[indeksSciany][1][0];
+    double By = this->trojkaty3d[indeksSciany][1][1];
+    double Bz = this->trojkaty3d[indeksSciany][1][2];
+
+    double Cx = this->trojkaty3d[indeksSciany][2][0];
+    double Cy = this->trojkaty3d[indeksSciany][2][1];
+    double Cz = this->trojkaty3d[indeksSciany][2][2];
+
+    //PxR
+    double  Px = Bx-Ax;
+    double  Py = By-Ay;
+    double  Pz = Bz-Az;
+
+    double  Rx = Cx-Ax;
+    double  Ry = Cy-Ay;
+    double  Rz = Cz-Az;
+
+    double  wektorNormalnyx = Py*Rz-Pz*Ry;
+    double  wektorNormalnyy = Pz*Rx-Px*Rz;
+    double  wektorNormalnyz = Px*Ry-Py*Rx;
+
+    double dlugosc = sqrt(wektorNormalnyx*wektorNormalnyx+wektorNormalnyy*wektorNormalnyy+wektorNormalnyz*wektorNormalnyz);
+
+    wektorNormalnyx/=dlugosc;
+    wektorNormalnyz/=dlugosc;
+    wektorNormalnyy/=dlugosc;
+
+    double swiatlox, swiatloy, swiatloz;
+
+    if(pozycja == 1)
+    {
+       swiatlox = (Ax+Bx+Cx)/3;
+       swiatloy = (Ay+By+Cy)/3;
+       swiatloz = (Az+Bz+Cz)/3-150;
+    }
+    else if(pozycja == 0)
+    {
+        swiatlox = (Ax+Bx+Cx)/3-40;
+        swiatloy = (Ay+By+Cy)/3;
+        swiatloz = (Az+Bz+Cz)/3-150;
+    }
+    else if(pozycja == 2)
+    {
+       swiatlox = (Ax+Bx+Cx)/3+40;
+       swiatloy = (Ay+By+Cy)/3;
+       swiatloz = (Az+Bz+Cz)/3-150;
+    }
+
+
+    double dlugosc2 = sqrt(swiatlox*swiatlox+swiatloy*swiatloy+swiatloz*swiatloz);
+
+    swiatlox/=dlugosc2;
+    swiatloy/=dlugosc2;
+    swiatloz/=dlugosc2;
+
+    double wynik = wektorNormalnyx*swiatlox + wektorNormalnyy*swiatloy + wektorNormalnyz*swiatloz;
+
+    if(wynik >= 0)
+    {
+       wynik = 0;
+    }
+    else
+    {
+       wynik*=(-1);
+    }
+
+    wynik = std::max(wynik, 0.2);
+
+    return wynik;
 }
